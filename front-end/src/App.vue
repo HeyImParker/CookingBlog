@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">Home</router-link>
+      <router-link to="/">
+        <img src="@/assets/favicon.png">
+      </router-link>
       <div v-if="user">
       <router-link to="/account">My Account</router-link>
       <button @click="logOut">Log Out</button>
@@ -18,12 +20,12 @@
 import axios from 'axios';
 export default {
   async created() {
-        try {
-            let response = await axios.get('/api/users');
-            this.$root.$data.user = response.data.user;
-        } catch (error) {
-            this.$root.$data.user = null;
-        }
+      try {
+          let response = await axios.get('/api/users');
+          this.$root.$data.user = response.data.user;
+      } catch (error) {
+          this.$root.$data.user = null;
+      }
     },
     computed: {
         user() {
@@ -46,6 +48,12 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -55,12 +63,21 @@ export default {
 }
 
 #nav {
-  padding: 30px;
+  padding: 20px 30px 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 #nav a {
   font-weight: bold;
   color: #2c3e50;
+  margin: .5em;
+}
+
+#nav img {
+  height: 3em;
+  width: auto;
 }
 
 #nav a.router-link-exact-active {

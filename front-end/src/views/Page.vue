@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <recipe recipe="recipe"/>
+    <recipe :recipeName="recipe"/>
   </div>
 </template>
 
