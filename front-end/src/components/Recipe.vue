@@ -4,9 +4,8 @@
         <ul>
             <li v-for="ingredient in recipe.ingredients" :key="ingredient._id">{{ingredient.amount}} {{ingredient.ingredient}}</li>
         </ul>
-        <ol>
-            <li v-for="step in recipe.directions" :key="step._id"></li>
-        </ol>
+        <img :scr="recipe.path">
+        <p>{{recipe.directions}}</p>
     </div>
 </template>
 
