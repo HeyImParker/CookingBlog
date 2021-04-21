@@ -35,4 +35,7 @@ app.use("/api/recipe", recipes.routes);
 const users = require("./users.js");
 app.use("/api/users", users.routes);
 
+const comments = require("./comments.js");
+app.use("/api/recipe/comments", comments.routes);
+
 app.listen(3002, () => console.log('Server listening on port 3002!'));

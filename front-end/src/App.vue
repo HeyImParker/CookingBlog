@@ -1,8 +1,9 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/">
+      <router-link to="/" class="title-home">
         <img src="@/assets/favicon.png">
+        <p class="title">The Mixing Bowl</p>
       </router-link>
       <div v-if="user">
       <router-link to="/account">My Account</router-link>
@@ -20,18 +21,18 @@
 import axios from 'axios';
 export default {
   async created() {
-      try {
-          let response = await axios.get('/api/users');
-          this.$root.$data.user = response.data.user;
-      } catch (error) {
-          this.$root.$data.user = null;
-      }
+    try {
+      let response = await axios.get('/api/users');
+      this.$root.$data.user = response.data.user;
+    } catch (error) {
+      this.$root.$data.user = null;
+    }
+  },
+  computed: {
+    user() {
+      return this.$root.$data.user;
     },
-    computed: {
-        user() {
-            return this.$root.$data.user;
-        }
-    },
+  },
   methods: {
     async logOut() {
       if(this.user) {
@@ -52,6 +53,21 @@ export default {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+}
+
+.title-home {
+  display: flex;
+  align-items: center;
+}
+
+.title {
+  font-family: 'Sacramento', cursive;
+  font-size: 2em;
+  margin: auto .5em;
+}
+
+a {
+  text-decoration: none;
 }
 
 #app {
@@ -83,4 +99,5 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 }
+
 </style>
