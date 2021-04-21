@@ -27,6 +27,7 @@ const recipeSchema = new mongoose.Schema({
     },
     path: String,
     title: String,
+    discription: String,
     ingredients: [],
     directions: String,
     notes: String,
@@ -51,6 +52,7 @@ router.post('/', validUser, upload.single('photo'), async (req,res) => {
         user: req.user,
         path: "/images/" + req.file.filename,
         title: req.body.title,
+        discription: req.body.discription,
         ingredients: ingredients,
         directions: req.body.directions,
         notes: req.body.notes
@@ -111,6 +113,35 @@ router.get('/:title', async (req,res) => {
 });
 
 // modify recipe
+router.put('/:title', async (req,res) => {
+    try {
+        let duplicate = await Recipe.findOne({title: req.body.title});
+        if(!duplicate) {
+            let recipe = await Recipe.findOne({title: req.params.title})
+            if(!recipe) {
+                return res.sendStatus(404);
+            }
+            let titleChange = false;
+            if(recipe.title != req.body.title)
+                titleChange = true;
+            recipe.title = req.body.title;
+            recipe.discription = req.body.discription;
+            recipe.ingredients = JSON.parse(req.body.ingredients);
+            recipe.directions = req.body.directions;
+            recipe.notes = req.body.notes;
+            await recipe.save();
+            return res.send(titleChange);
+        } else {
+            return res.sendStatus(400).send({
+                message: "Title already in use"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+})
+
 
 module.exports = {
     model: Recipe,
