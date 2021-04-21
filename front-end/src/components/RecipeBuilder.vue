@@ -56,7 +56,6 @@ export default {
                         i--;
                     }
                 }
-                console.log("out");
                 const formData = new FormData();
                 formData.append('photo', this.file, this.file.name);
                 formData.append('title', this.title);

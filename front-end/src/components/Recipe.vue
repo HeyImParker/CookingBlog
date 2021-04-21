@@ -5,14 +5,19 @@
         <p><textarea v-model="recipe.discription" placeholder="Discription"></textarea></p>
         <img :src="recipe.path">
         <ul>
-            <li v-for="ingredient in recipe.ingredients" :key="ingredient._id"><input type="text" v-model="ingredient.ingredient"></li>
+            <li v-for="(ingredient, counter) in recipe.ingredients" :key="counter"><input type="text" v-model="ingredient.ingredient"><button @click="removeIngredient(counter)">X</button></li>
         </ul>
         <button @click="addIngredient">Add Ingredient</button>
-        <p>{{recipe.directions}}</p>
-        <p class="notes">{{recipe.notes}}</p>
+        <p><textarea v-model="recipe.directions" placeholder="directions"></textarea></p>
+        <p class="notes"><textarea v-model="recipe.notes" placeholder="notes"></textarea></p>
+        <div>
+            <button @click="submitChanges">Submit</button>
+            <button @click="revert">Revert</button>
+        </div>
     </div>
     <div v-else>
         <h1>{{recipe.title}}</h1>
+        <button v-if="owner" @click="edit">Edit recipe</button>
         <p>{{recipe.discription}}</p>
         <img :src="recipe.path">
         <ul>
@@ -58,10 +63,37 @@ export default {
                 console.log(error);
             }
         },
+        async submitChanges() {
+            try {
+                let titleChange = await axios.put('/api/recipe/' + this.recipeName, {
+                    title: this.recipe.title,
+                    discription: this.recipe.discription,
+                    ingredients: JSON.stringify(this.recipe.ingredients),
+                    directions: this.recipe.directions,
+                    notes: this.recipe.notes
+                });
+                this.editing = false;
+                if(titleChange.data) {
+                    this.$emit('titleChange', this.recipe.title);
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        edit() {
+            this.editing = true;
+        },
+        revert() {
+            this.editing = false;
+            this.getRecipe();
+        },
         addIngredient() {
             this.recipe.ingredients.push({
                 ingredient: ""
             })
+        },
+        removeIngredient(counter) {
+            this.recipe.ingredients.splice(counter,1);
         },
     }
 }

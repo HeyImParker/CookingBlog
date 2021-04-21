@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <recipe :recipeName="recipe"/>
+    <recipe :recipeName="recipe" @titleChange="titleChange"/>
   </div>
 </template>
 
@@ -14,6 +14,11 @@ export default {
   data() {
     return {
       recipe: this.$route.params.recipeName
+    }
+  },
+  methods: {
+    titleChange(title) {
+      this.$router.push({ path: `/page/${title}` })
     }
   }
 }
