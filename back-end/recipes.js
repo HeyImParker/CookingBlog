@@ -115,27 +115,28 @@ router.get('/:title', async (req,res) => {
 // modify recipe
 router.put('/:title', validUser, async (req,res) => {
     try {
-        let duplicate = await Recipe.findOne({title: req.body.title});
-        if(!duplicate) {
-            let recipe = await Recipe.findOne({title: req.params.title})
-            if(!recipe) {
-                return res.sendStatus(404);
+        if(req.params.title != req.body.title) {
+            let duplicate = await Recipe.findOne({title: req.body.title});
+            if(duplicate) {
+                return res.status(400).send({
+                    message: "Title already in use"
+                })
             }
-            let titleChange = false;
-            if(recipe.title != req.body.title)
-                titleChange = true;
-            recipe.title = req.body.title;
-            recipe.discription = req.body.discription;
-            recipe.ingredients = JSON.parse(req.body.ingredients);
-            recipe.directions = req.body.directions;
-            recipe.notes = req.body.notes;
-            await recipe.save();
-            return res.send(titleChange);
-        } else {
-            return res.sendStatus(400).send({
-                message: "Title already in use"
-            })
         }
+        let recipe = await Recipe.findOne({title: req.params.title})
+        if(!recipe) {
+            return res.sendStatus(404);
+        }
+        let titleChange = false;
+        if(recipe.title != req.body.title)
+            titleChange = true;
+        recipe.title = req.body.title;
+        recipe.discription = req.body.discription;
+        recipe.ingredients = JSON.parse(req.body.ingredients);
+        recipe.directions = req.body.directions;
+        recipe.notes = req.body.notes;
+        await recipe.save();
+        return res.send(titleChange);
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);
