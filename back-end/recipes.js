@@ -113,7 +113,7 @@ router.get('/:title', async (req,res) => {
 });
 
 // modify recipe
-router.put('/:title', async (req,res) => {
+router.put('/:title', validUser, async (req,res) => {
     try {
         let duplicate = await Recipe.findOne({title: req.body.title});
         if(!duplicate) {
@@ -136,6 +136,23 @@ router.put('/:title', async (req,res) => {
                 message: "Title already in use"
             })
         }
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+});
+
+//Delete a recipe
+router.delete('/:title', validUser, async (req,res) => {
+    try {
+        let recipe = await Recipe.findOne({
+            title: req.params.title
+        });
+        if(!recipe) {
+            return res.sendStatus(404);
+        }
+        await recipe.delete();
+        return res.sendStatus(200);
     } catch (error) {
         console.log(error);
         return res.sendStatus(500);

@@ -1,29 +1,29 @@
 <template>
 <div>
     <form>
-      <fieldset>
-        <legend>Register for an account</legend>
+      <div class="top">
+        <p>Register for an account</p>
         <input placeholder="first name" v-model="firstName">
         <input placeholder="last name" v-model="lastName">
-      </fieldset>
-      <fieldset>
+      </div>
+      <div>
         <input placeholder="username" v-model="username">
         <input type="password" placeholder="password" v-model="password">
-      </fieldset>
-      <fieldset>
+      </div>
+      <div>
         <button type="submit" class="pure-button pure-button-primary" @click.prevent="register">Register</button>
-      </fieldset>
+      </div>
     </form>
     <p v-if="error" class="error">{{error}}</p>
-    <form class="pure-form space-above">
-      <fieldset>
-        <legend>Login</legend>
+    <form>
+      <div class="top">
+        <p>Login</p>
         <input placeholder="username" v-model="usernameLogin">
         <input type="password" placeholder="password" v-model="passwordLogin">
-      </fieldset>
-      <fieldset>
+      </div>
+      <div>
         <button type="submit" class="pure-button pure-button-primary" @click.prevent="login">Login</button>
-      </fieldset>
+      </div>
     </form>
     <p v-if="errorLogin" class="error">{{errorLogin}}</p>
 </div>
@@ -87,35 +87,16 @@ export default {
 </script>
 
 <style scoped>
-.space-above {
-  margin-top: 50px;
-}
-
-h1 {
-  font-size: 28px;
-  font-variant: capitalize;
-}
-
-.hero {
-  padding: 120px;
-  display: flex;
-  justify-content: center;
-}
-
-.heroBox {
-  text-align: center;
-}
-
-.hero form {
-  font-size: 14px;
-}
-
-.hero form legend {
-  font-size: 20px;
-}
-
 input {
-  margin-right: 10px;
+  margin: .4em .2em;
+}
+
+p {
+  padding: .4em;
+}
+
+.top {
+  margin-top: 2em;
 }
 
 .error {
@@ -126,5 +107,11 @@ input {
   font-size: 10px;
   background-color: #d9534f;
   color: #fff;
+}
+
+@media only screen and (max-width: 400px) {
+  .top {
+    margin-bottom: .7em;
+  }
 }
 </style>

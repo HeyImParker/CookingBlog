@@ -1,15 +1,16 @@
 <template>
-<div>
-    <input type="text" v-model="title" placeholder="title">
-    <textarea v-model="discription" placeholder="discription"></textarea>
+<div class="main">
+    <input type="text" v-model="title" placeholder="Title">
+    <textarea v-model="discription" placeholder="Discription"></textarea>
+    <p>Picture: <input type="file" name="filefield" @input="fileChanged"></p>
+    <p>Ingredients</p>
     <div v-for="(object, counter) in ingredients" :key="counter" >
         <input type="text" v-model="object.ingredient">
-        <button @click="removeIngredient(counter)">X</button>
+        <button class="x" @click="removeIngredient(counter)">X</button>
     </div>
     <button @click="addIngredient">Add Ingredient</button>
-    <textarea v-model="directions" placeholder="directions"></textarea>
-    <input type="file" name="filefield" @input="fileChanged">
-    <textarea v-model="notes" placeholder="notes"></textarea>
+    <textarea class="big" v-model="directions" placeholder="Directions"></textarea>
+    <textarea class="big" v-model="notes" placeholder="Notes"></textarea>
     <button @click="upload">Upload</button>
     <button @click="cancel">Cancel</button>
 </div>
@@ -105,8 +106,26 @@ export default {
 </script>
 
 <style scoped>
+.main {
+    border: var(--black) 1px solid;
+    width: 90%;
+    margin: 1em auto;
+    padding: 1em;
+}
+
 textarea {
+    width: 90%;
     display: block;
-    margin: .5em auto;
+    margin: 1em auto;
+    border-radius: 2px;
+    padding: 2px;
+}
+
+.big {
+    height: 8em;
+}
+
+p {
+    margin: .5em;
 }
 </style>

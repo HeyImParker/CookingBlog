@@ -3,31 +3,39 @@
     <div v-if="editing">
         <h1><input type="text" v-model="recipe.title" placeholder="Title"></h1>
         <p><textarea v-model="recipe.discription" placeholder="Discription"></textarea></p>
-        <img :src="recipe.path">
+        <div class="picture">
+            <img :src="recipe.path">
+        </div>
         <ul>
-            <li v-for="(ingredient, counter) in recipe.ingredients" :key="counter"><input type="text" v-model="ingredient.ingredient"><button @click="removeIngredient(counter)">X</button></li>
+            <li v-for="(ingredient, counter) in recipe.ingredients" :key="counter"><input type="text" v-model="ingredient.ingredient"><button class="x" @click="removeIngredient(counter)">X</button></li>
+            <li class="no-dot"><button @click="addIngredient">Add Ingredient</button></li>
         </ul>
-        <button @click="addIngredient">Add Ingredient</button>
-        <p><textarea v-model="recipe.directions" placeholder="directions"></textarea></p>
-        <p class="notes"><textarea v-model="recipe.notes" placeholder="notes"></textarea></p>
+        <p><textarea class="big" v-model="recipe.directions" placeholder="directions"></textarea></p>
+        <p class="notes"><textarea class="big" v-model="recipe.notes" placeholder="notes"></textarea></p>
         <div>
             <button @click="submitChanges">Submit</button>
-            <button @click="revert">Revert</button>
+            <button @click="revert">Cancel</button>
+            <button @click="deleteRecipe" class="delete">Delete recipe</button>
         </div>
+        <p></p>
+        <hr>
+        <p></p>
     </div>
     <div v-else>
         <h1>{{recipe.title}}</h1>
         <button v-if="owner" @click="edit">Edit recipe</button>
         <p>{{recipe.discription}}</p>
-        <p>Posted {{formatDate(recipe.created)}}</p>
-        <img :src="recipe.path">
+        <p>First posted {{formatDate(recipe.created)}}</p>
+        <div class="picture">
+            <img :src="recipe.path">
+        </div>
         <ul>
             <li v-for="ingredient in recipe.ingredients" :key="ingredient._id">{{ingredient.amount}} {{ingredient.ingredient}}</li>
         </ul>
         <p>{{recipe.directions}}</p>
         <p class="notes">{{recipe.notes}}</p>
     </div>
-    <div>
+    <div class="comments">
       <div v-if="user">
         <div class="row-spread" v-if="commenting">
             <textarea v-model="comment" placeholder="Write your comment here"></textarea>
@@ -43,6 +51,7 @@
           <p>Login to add comments</p>
       </div>
       <div v-for="comment in comments" :key="comment._id">
+          <p></p>
           <hr>
           <p>{{comment.comment}}</p>
           <h6>{{comment.user.firstName}} {{comment.user.lastName}} - {{formatDate(comment.created)}}</h6>
@@ -160,15 +169,38 @@ export default {
             else
                 return moment(date).format('d MMMM YYYY');
         },
+        async deleteRecipe() {
+            if(confirm("Are sure you would like to delete your recipe?")) {
+                try {
+                    await axios.delete('/api/recipe/' + this.recipeName);
+                    this.$emit('deleteRecipe');
+                } catch(error) {
+                    console.log(error);
+                }
+            }
+        }
     }
 }
 </script>
 
 <style scoped>
-img {
-    max-width: 50%;
+.picture {
+    width: 50%;
     float: left;
-    margin: 0 0 1em 1em;
+    margin: .5em;
+}
+
+img {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+textarea {
+    width: 80%;
+}
+
+.big {
+    height: 10em;
 }
 
 h1 {
@@ -179,8 +211,45 @@ li {
     text-align: left;
 }
 
+.no-dot {
+    list-style-type: none;
+}
+
 ul {
     margin: 1.5em;
     margin-left: 57%;
+}
+
+p {
+    margin: .5em;
+}
+
+.comments {
+    clear: both;
+}
+
+hr {
+    width: 75%;
+    color: var(--black);
+    margin: 0 auto;
+}
+
+@media only screen and (max-width: 400px) {
+    li input {
+        width: 90%;
+    }
+
+    .x {
+        margin: 0;
+        padding: 2px;
+    }
+}
+
+@media only screen and (min-width: 401px) and (max-width: 760px) {
+
+}
+
+@media only screen and (min-width: 761px) {
+
 }
 </style>

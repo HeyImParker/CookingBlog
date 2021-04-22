@@ -202,7 +202,24 @@ router.delete("/", validUser, async (req, res) => {
         return res.sendStatus(500);
     }
 });
-  
+
+// delete account
+router.delete('/user', validUser, async (req,res) => {
+    try {
+        let user = await User.findOne({
+            _id: req.user._id
+        });
+        if(!user) {
+            return res.sendStatus(404);
+        }
+        await user.delete();
+        req.session = null;
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(500);
+    }
+})
   
 module.exports = {
     routes: router,

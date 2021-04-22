@@ -4,7 +4,7 @@
     <input class="suggestions input" v-model="find" placeholder="Search">
   </div>
   <div class="grid">
-    <router-link class="grid-item" v-for="recipe in filteredRecipes" :key="recipe._id" :to="'/page/' + recipe.title">
+    <router-link class="grid-item link" v-for="recipe in filteredRecipes" :key="recipe._id" :to="'/page/' + recipe.title">
       <h2>{{recipe.title}}</h2>
       <img :src="recipe.path">
     </router-link>
@@ -60,22 +60,25 @@ export default {
 }
 
 .grid-item {
-  width: 16em;
+  width: 14em;
+  margin: 1em;
 }
 
 .grid-item img {
-  max-width: 90%;
-  max-height: 75%;
+  max-width: 95%;
+  max-height: 85%;
 }
 
 .search {
   display: flex;
   width: 100%;
   justify-content: flex-end;
+  padding: 5px 0;
 }
 
 .search input {
   display: block;
   margin: .2em 1.3em;
 }
+
 </style>
