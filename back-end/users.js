@@ -142,14 +142,14 @@ router.post('/', async (req, res) => {
     }
 });
   
-  // login a user
-  router.post('/login', async (req, res) => {
-        // Make sure that the form coming from the browser includes a username and a
-        // password, otherwise return an error.
-        if (!req.body.username || !req.body.password)
-            return res.sendStatus(400);
-    
-        try {
+// login a user
+router.post('/login', async (req, res) => {
+    // Make sure that the form coming from the browser includes a username and a
+    // password, otherwise return an error.
+    if (!req.body.username || !req.body.password)
+        return res.sendStatus(400);
+
+    try {
         //  lookup user record
         const user = await User.findOne({
             username: req.body.username
