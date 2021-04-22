@@ -32,8 +32,8 @@
         <ul>
             <li v-for="ingredient in recipe.ingredients" :key="ingredient._id">{{ingredient.amount}} {{ingredient.ingredient}}</li>
         </ul>
-        <p>{{recipe.directions}}</p>
-        <p class="notes">{{recipe.notes}}</p>
+        <TextBody :text="recipe.directions"></TextBody>
+        <TextBody :text="recipe.notes"></TextBody>
     </div>
     <div class="comments">
       <div v-if="user">
@@ -64,10 +64,14 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import TextBody from '@/components/TextBody.vue'
 export default {
     name: "Recipe",
     props: {
         recipeName: String
+    },
+    components: {
+        TextBody
     },
     data() {
         return {
@@ -178,7 +182,7 @@ export default {
                     console.log(error);
                 }
             }
-        }
+        },
     }
 }
 </script>
@@ -188,6 +192,7 @@ export default {
     width: 50%;
     float: left;
     margin: .5em;
+    margin-right: 1.5em;
 }
 
 img {
