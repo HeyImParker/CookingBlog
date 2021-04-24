@@ -14,10 +14,6 @@
       </div>
     </div>
     <router-view/>
-    <div class="footer">
-      <p>I spent about 18 hours on this project</p>
-      <a href="https://github.com/HeyImParker/CookingBlog">Github Repository</a>
-    </div>
   </div>
 </template>
 

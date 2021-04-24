@@ -6,7 +6,9 @@
   <div class="grid">
     <router-link class="grid-item link" v-for="recipe in filteredRecipes" :key="recipe._id" :to="'/page/' + recipe.title">
       <h2>{{recipe.title}}</h2>
-      <img :src="recipe.path">
+      <div>
+        <img :src="recipe.path">
+      </div>
     </router-link>
   </div>
 </div>
@@ -61,12 +63,26 @@ export default {
 
 .grid-item {
   width: 14em;
+  height: 20em;
   margin: 1em;
+
+}
+
+.grid-item h2 {
+  height: 1.5em;
+}
+
+.grid-item div {
+  height: 17.5em;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .grid-item img {
-  max-width: 95%;
-  max-height: 85%;
+  max-width: 98%;
+  max-height: 98%;
 }
 
 .search {
