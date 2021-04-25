@@ -32,30 +32,18 @@
         <ul>
             <li v-for="ingredient in recipe.ingredients" :key="ingredient._id">{{ingredient.amount}} {{ingredient.ingredient}}</li>
         </ul>
-        <p>{{recipe.directions}}</p>
-        <p class="notes">{{recipe.notes}}</p>
+        <TextBody :text="recipe.directions"></TextBody>
+        <TextBody :text="recipe.notes"></TextBody>
     </div>
     <div class="comments">
       <div v-if="user">
-        <div class="row-spread" v-if="commenting">
-            <textarea v-model="comment" placeholder="Write your comment here"></textarea>
-            <p>Posting comment as {{user.firstName}} {{user.lastName}}</p>
-            <div class= "row-spread">
-                <button @click="toggleComment">Cancel</button>
-                <button @click="uploadComment">Post</button>
-            </div>
-        </div>
+        <CommentWrite v-if="commenting" sub="false" parent="recipeName" @upload="uploadComment" @toggle="toggleComment"></CommentWrite>
         <button v-else @click="toggleComment">Write a comment</button>
       </div>
       <div v-else>
           <p>Login to add comments</p>
       </div>
-      <div v-for="comment in comments" :key="comment._id">
-          <p></p>
-          <hr>
-          <p>{{comment.comment}}</p>
-          <h6>{{comment.user.firstName}} {{comment.user.lastName}} - {{formatDate(comment.created)}}</h6>
-      </div>
+      <CommentDisplay class="comments" v-for="comment in comments" :key="comment._id" :comment="comment"></CommentDisplay>
       <p></p>
     </div>
 </div>
@@ -64,10 +52,18 @@
 <script>
 import axios from 'axios';
 import moment from 'moment';
+import TextBody from '@/components/TextBody.vue'
+import CommentWrite from '@/components/CommentWrite.vue'
+import CommentDisplay from '@/components/CommentDisplay.vue'
 export default {
     name: "Recipe",
     props: {
         recipeName: String
+    },
+    components: {
+        TextBody,
+        CommentWrite,
+        CommentDisplay,
     },
     data() {
         return {
@@ -110,7 +106,7 @@ export default {
         },
         async getComments() {
             try {
-                let response = await axios.get('/api/recipe/comments/' + this.recipeName);
+                let response = await axios.get('/api/recipe/comments/' + this.recipeName + '/title');
                 this.comments = response.data;
             } catch (error) {
                 console.log(error);
@@ -152,16 +148,9 @@ export default {
             this.comment = "";
             this.commenting = !(this.commenting);
         },
-        async uploadComment() {
-            try {
-                await axios.post('/api/recipe/comments/' + this.recipeName, {
-                    comment: this.comment
-                });
-                this.toggleComment();
-                this.getComments();
-            } catch(error) {
-                console.log(error);
-            }
+        uploadComment() {
+            this.toggleComment();
+            this.getComments();
         },
         formatDate(date) {
             if (moment(date).diff(Date.now(), 'days') < 15)
@@ -178,7 +167,7 @@ export default {
                     console.log(error);
                 }
             }
-        }
+        },
     }
 }
 </script>
@@ -188,6 +177,7 @@ export default {
     width: 50%;
     float: left;
     margin: .5em;
+    margin-right: 1.5em;
 }
 
 img {
@@ -232,6 +222,11 @@ hr {
     width: 75%;
     color: var(--black);
     margin: 0 auto;
+}
+
+.comments {
+    margin: 0 auto;
+    width: 90%;
 }
 
 @media only screen and (max-width: 400px) {
